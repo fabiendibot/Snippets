@@ -1,5 +1,5 @@
 ﻿$Output = @()
-Get-Cluster 'Haute_Dispo_EVC' | Get-VM | Get-View | Where {-not $_.Config.Template} | Select *, @{N="Disks";E={@($_.Guest.Disk.Length)}} | Sort-Object -Descending Disks | % {
+Get-View -SearchRoot (Get-Cluster '<datacenter>' | Get-View).MoRef -ViewType virtualmachine -Filter @{'Config.Template'='False'} | Select *, @{N="Disks";E={@($_.Guest.Disk.Length)}} | Sort-Object -Descending Disks | % {
     $VM = $_
     $prop = New-Object System.Collections.Specialized.OrderedDictionary
     $prop.add('Name',$VM.name)
